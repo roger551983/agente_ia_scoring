@@ -33,7 +33,7 @@ def predecir_segmento(data: ClientesRequest):
     arbol.df_plot = df_input.copy()
     nombre_archivo_svg = arbol.CrearGraficoDispersion(predicciones_lista)
     #url_grafico = f"http://localhost:8000/static/{nombre_archivo_svg}"
-    url_grafico = f"http://34.224.78.124:8000/static/{nombre_archivo_svg}"
+    url_grafico = f"http://34.224.78.124:8000{nombre_archivo_svg}"
     print(list(predicciones_lista))
     resultados=[]
     for cliente, pred in zip(data.clientes, predicciones_lista):

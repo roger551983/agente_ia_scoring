@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Entornos virtuales
+env/
+venv/
+.myenv/
+.myenv
+*.env
+*.venv
+
+# Archivos de logs
+*.log
+
+# Archivos de configuración locales
+*.sqlite3
+*.db
+.DS_Store
