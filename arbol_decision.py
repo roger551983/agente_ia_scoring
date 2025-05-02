@@ -1,3 +1,5 @@
+import os
+import uuid
 from sklearn.tree import DecisionTreeClassifier
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -56,9 +58,50 @@ class ArbolDecisionScoring:
         X_predict= df_puntaje[["puntajeDescarga", "puntajeClick", "puntajeVisita", "puntajeCliente", "puntajeTotal"]]
          # Predice y mapea la predicción al segmento
         prediction = modelo_entrenado.predict(X_predict)
-        return  [segmentacion_map[i]for i in list(prediction)]
+        self.df_plot=X_predict
+        segmentacion= [segmentacion_map[i]for i in list(prediction)]
+        return  segmentacion
         
-        
+    def CrearGraficoDispersion(self,segmentacion):
+        df = getattr(self, 'df_plot', None)
+        df['esCliente']=df['puntajeCliente'].apply(lambda x :"Si" if x==5 else "No")
+        df['segmentacion']=segmentacion
+        if df is not None:
+            plt.figure(figsize=(8,6))
+            colores = {
+            "decision": "red",
+            "consideracion": "orange",
+            "descubrimiento": "blue",
+            "Inexistente": "gray"
+           }
+            for segmento, grupo in df.groupby("segmentacion"):
+                plt.scatter(grupo['esCliente'], 
+                            grupo['puntajeTotal'],
+                            label=segmento,
+                            s=80,
+                            color=colores.get(segmento, "black"),
+                            edgecolors='k',
+                            alpha=0.6
+                            
+                            )
+                
+            plt.xlabel("Es Cliente")
+            plt.ylabel("Puntaje")
+            plt.title("Dispersión: Puntaje vs Cliente")
+            plt.grid(True, linestyle='--', alpha=0.5)
+            plt.legend()
+
+            folder_name = "Grafico_Dispersion"
+            os.makedirs(folder_name, exist_ok=True)
+            file_name = f"{uuid.uuid4()}.svg"
+            file_path = os.path.join(folder_name, file_name)
+            plt.savefig(file_path, format='svg')
+            return file_name
+            #plt.show()
+            #print(f"Gráfico  de dispersion guardado como: {file_name}")
+                    
+       
+
 
 
 
